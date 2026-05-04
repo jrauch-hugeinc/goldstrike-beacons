@@ -1,0 +1,102 @@
+[
+  {
+    "filename": "casino-resort__mohegan-sun__casino__desktop.png",
+    "url": "https://www.mohegansun.com/playing.html",
+    "viewport": "desktop",
+    "category": "casino-resort",
+    "site": "mohegan-sun",
+    "page_type": "casino",
+    "status": "captured",
+    "error": null
+  },
+  {
+    "filename": "casino-resort__mohegan-sun__casino__mobile.png",
+    "url": "https://www.mohegansun.com/playing.html",
+    "viewport": "mobile",
+    "category": "casino-resort",
+    "site": "mohegan-sun",
+    "page_type": "casino",
+    "status": "captured",
+    "error": null
+  },
+  {
+    "filename": "casino-resort__mohegan-sun__hotel-rooms__desktop.png",
+    "url": "https://www.mohegansun.com/hotel-spa-and-golf.html",
+    "viewport": "desktop",
+    "category": "casino-resort",
+    "site": "mohegan-sun",
+    "page_type": "hotel-rooms",
+    "status": "captured",
+    "error": null
+  },
+  {
+    "filename": "casino-resort__mohegan-sun__hotel-rooms__mobile.png",
+    "url": "https://www.mohegansun.com/hotel-spa-and-golf.html",
+    "viewport": "mobile",
+    "category": "casino-resort",
+    "site": "mohegan-sun",
+    "page_type": "hotel-rooms",
+    "status": "captured",
+    "error": null
+  },
+  {
+    "filename": "casino-resort__mohegan-sun__dining__desktop.png",
+    "url": "https://www.mohegansun.com/poi/dining.html",
+    "viewport": "desktop",
+    "category": "casino-resort",
+    "site": "mohegan-sun",
+    "page_type": "dining",
+    "status": "captured",
+    "error": null
+  },
+  {
+    "filename": "casino-resort__mohegan-sun__dining__mobile.png",
+    "url": "https://www.mohegansun.com/poi/dining.html",
+    "viewport": "mobile",
+    "category": "casino-resort",
+    "site": "mohegan-sun",
+    "page_type": "dining",
+    "status": "captured",
+    "error": null
+  },
+  {
+    "filename": "casino-resort__mohegan-sun__entertainment__desktop.png",
+    "url": "https://www.mohegansun.com/events-and-promotions/schedule-of-events.html",
+    "viewport": "desktop",
+    "category": "casino-resort",
+    "site": "mohegan-sun",
+    "page_type": "entertainment",
+    "status": "captured",
+    "error": null
+  },
+  {
+    "filename": "casino-resort__mohegan-sun__entertainment__mobile.png",
+    "url": "https://www.mohegansun.com/events-and-promotions/schedule-of-events.html",
+    "viewport": "mobile",
+    "category": "casino-resort",
+    "site": "mohegan-sun",
+    "page_type": "entertainment",
+    "status": "captured",
+    "error": null
+  },
+  {
+    "filename": "casino-resort__mohegan-sun__rewards__desktop.png",
+    "url": "https://www.mohegansun.com/momentum.html",
+    "viewport": "desktop",
+    "category": "casino-resort",
+    "site": "mohegan-sun",
+    "page_type": "rewards",
+    "status": "captured",
+    "error": null
+  },
+  {
+    "filename": "casino-resort__mohegan-sun__rewards__mobile.png",
+    "url": "https://www.mohegansun.com/momentum.html",
+    "viewport": "mobile",
+    "category": "casino-resort",
+    "site": "mohegan-sun",
+    "page_type": "rewards",
+    "status": "captured",
+    "error": null
+  }
+]

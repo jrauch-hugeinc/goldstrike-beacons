@@ -1,0 +1,22 @@
+[
+  {
+    "filename": "casino-resort__marina-bay-sands__dining__desktop.png",
+    "url": "https://www.marinabaysands.com/restaurants/view-all.html",
+    "viewport": "desktop",
+    "category": "casino-resort",
+    "site": "marina-bay-sands",
+    "page_type": "dining",
+    "status": "captured",
+    "error": null
+  },
+  {
+    "filename": "casino-resort__marina-bay-sands__dining__mobile.png",
+    "url": "https://www.marinabaysands.com/restaurants/view-all.html",
+    "viewport": "mobile",
+    "category": "casino-resort",
+    "site": "marina-bay-sands",
+    "page_type": "dining",
+    "status": "error",
+    "error": "Request timed out"
+  }
+]
