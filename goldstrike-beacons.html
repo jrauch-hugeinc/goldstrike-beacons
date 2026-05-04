@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gold Strike — Beacon Research</title>
+<style>
+  :root {
+    --sidebar-w: 210px;
+    --panel-w: 260px;
+    --gray-0: #ffffff;
+    --gray-1: #F6F6F4;
+    --gray-2: #EBEBEA;
+    --gray-3: #C8C8C5;
+    --gray-4: #8A8A85;
+    --gray-5: #4A4A46;
+    --gray-6: #1A1A18;
+    --accent: #1A56DB;
+    --accent-bg: #EEF3FD;
+    --red: #C0392B;
+    --border: rgba(0,0,0,0.08);
+    --font: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font);
+    font-size: 13px;
+    color: var(--gray-6);
+    background: var(--gray-0);
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /* ── SIDEBAR ── */
+  #sidebar {
+    width: var(--sidebar-w);
+    min-width: var(--sidebar-w);
+    background: var(--gray-1);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  #sidebar-header {
+    padding: 20px 16px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .project-label {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gray-4);
+    margin-bottom: 4px;
+  }
+
+  .project-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--gray-6);
+    line-height: 1.2;
+  }
+
+  .project-sub {
+    font-size: 11px;
+    color: var(--gray-4);
+    margin-top: 2px;
+  }
+
+  .category-group { border-bottom: 1px solid var(--border); }
+
+  .category-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    cursor: pointer;
+    user-select: none;
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
+  }
+
+  .category-toggle:hover { background: var(--gray-2); }
+
+  .category-toggle-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gray-5);
+  }
+
+  .chevron {
+    font-size: 9px;
+    color: var(--gray-4);
+    transition: transform 0.2s;
+  }
+
+  .category-group.open .chevron { transform: rotate(90deg); }
+
+  .site-list { display: none; }
+  .category-group.open .site-list { display: block; }
+
+  .site-link {
+    display: block;
+    padding: 7px 16px 7px 22px;
+    font-size: 12px;
+    color: var(--gray-5);
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+    line-height: 1.3;
+  }
+
+  .site-link:hover { background: var(--gray-2); color: var(--gray-6); }
+  .site-link.active { background: var(--accent-bg); color: var(--accent); font-weight: 500; }
+
+  .site-link .site-link-sub {
+    display: block;
+    font-size: 10px;
+    color: var(--gray-4);
+    font-weight: 400;
+    margin-top: 1px;
+  }
+
+  .site-link.active .site-link-sub { color: var(--accent); opacity: 0.7; }
+
+  /* ── MAIN ── */
+  #main {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+  }
+
+  .category-section { border-bottom: 1px solid var(--border); }
+
+  .category-header {
+    padding: 32px 32px 0;
+    position: sticky;
+    top: 0;
+    background: var(--gray-0);
+    z-index: 10;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 16px;
+  }
+
+  .category-eyebrow {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gray-4);
+    margin-bottom: 4px;
+  }
+
+  .category-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--gray-6);
+    margin-bottom: 10px;
+  }
+
+  .category-synthesis {
+    font-size: 13px;
+    line-height: 1.65;
+    color: var(--gray-5);
+    max-width: 640px;
+    padding-bottom: 2px;
+  }
+
+  /* ── SITE SECTION ── */
+  .site-section {
+    padding: 28px 32px 32px;
+    border-bottom: 1px solid var(--border);
+    scroll-margin-top: 0;
+  }
+
+  .site-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 6px;
+  }
+
+  .site-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--gray-6);
+  }
+
+  .site-name .client-badge {
+    display: inline-block;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: var(--gray-6);
+    color: white;
+    padding: 2px 6px;
+    border-radius: 2px;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+
+  .site-domain {
+    font-size: 11px;
+    color: var(--gray-4);
+    text-decoration: none;
+  }
+
+  .site-domain:hover { color: var(--accent); }
+
+  .viewport-toggle {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 14px;
+  }
+
+  .vt-btn {
+    font-size: 10px;
+    font-weight: 500;
+    padding: 3px 10px;
+    border: 1px solid var(--gray-3);
+    border-radius: 3px;
+    background: var(--gray-0);
+    color: var(--gray-5);
+    cursor: pointer;
+    letter-spacing: 0.02em;
+  }
+
+  .vt-btn.active {
+    background: var(--gray-6);
+    border-color: var(--gray-6);
+    color: white;
+  }
+
+  /* ── SCREENSHOT STRIP ── */
+  .screenshot-strip {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 12px;
+    margin-bottom: 20px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--gray-3) transparent;
+  }
+
+  .screenshot-strip::-webkit-scrollbar { height: 4px; }
+  .screenshot-strip::-webkit-scrollbar-track { background: transparent; }
+  .screenshot-strip::-webkit-scrollbar-thumb { background: var(--gray-3); border-radius: 2px; }
+
+  .screenshot-card {
+    flex: 0 0 auto;
+    width: 160px;
+  }
+
+  .screenshot-card.mobile-card { width: 90px; }
+
+  .screenshot-img-wrap {
+    width: 100%;
+    border: 0.5px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    background: var(--gray-1);
+    margin-bottom: 5px;
+  }
+
+  .screenshot-img-wrap img {
+    width: 100%;
+    height: auto;
+    display: block;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+
+  .screenshot-img-wrap img:hover { opacity: 0.88; }
+
+  .screenshot-label {
+    font-size: 10px;
+    color: var(--gray-4);
+    letter-spacing: 0.03em;
+    text-align: center;
+  }
+
+  .placeholder-card .screenshot-img-wrap {
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .placeholder-text {
+    font-size: 10px;
+    color: var(--gray-3);
+    text-align: center;
+    padding: 8px;
+    line-height: 1.4;
+  }
+
+  /* ── ANALYSIS ── */
+  .analysis-block {
+    max-width: 680px;
+  }
+
+  .analysis-header-obs {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--gray-6);
+    line-height: 1.5;
+    margin-bottom: 14px;
+    padding-left: 10px;
+    border-left: 2px solid var(--gray-6);
+  }
+
+  .analysis-sections {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+  }
+
+  .analysis-col-label {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gray-4);
+    margin-bottom: 7px;
+  }
+
+  .analysis-col ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .analysis-col ul li {
+    font-size: 12px;
+    color: var(--gray-5);
+    line-height: 1.55;
+    padding-left: 10px;
+    position: relative;
+    margin-bottom: 5px;
+  }
+
+  .analysis-col ul li::before {
+    content: '–';
+    position: absolute;
+    left: 0;
+    color: var(--gray-3);
+  }
+
+  /* Steal this column */
+  .analysis-col.steal ul li::before { color: var(--accent); }
+  .analysis-col.steal ul li { color: var(--gray-6); }
+
+  /* ── LIGHTBOX ── */
+  #lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+  }
+
+  #lightbox.open { display: flex; }
+
+  #lightbox img {
+    max-width: 90vw;
+    max-height: 90vh;
+    object-fit: contain;
+    border-radius: 4px;
+  }
+
+  #lightbox-close {
+    position: fixed;
+    top: 20px;
+    right: 24px;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    opacity: 0.7;
+    background: none;
+    border: none;
+    line-height: 1;
+  }
+
+  #lightbox-close:hover { opacity: 1; }
+
+  /* ── MOBILE HIDDEN ── */
+  .mobile-only { display: none; }
+  .desktop-only { display: block; }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div id="sidebar-header">
+    <div class="project-label">Huge Inc.</div>
+    <div class="project-name">Gold Strike Casinos</div>
+    <div class="project-sub">Beacon Research — May 2026</div>
+  </div>
+
+  <!-- Casino Resort -->
+  <div class="category-group open" id="nav-casino-resort">
+    <button class="category-toggle" onclick="toggleCategory('nav-casino-resort')">
+      <span class="category-toggle-label">Casino Resort</span>
+      <span class="chevron">▶</span>
+    </button>
+    <div class="site-list">
+      <button class="site-link active" onclick="scrollTo('gold-strike')">Gold Strike <span class="site-link-sub">Client</span></button>
+      <button class="site-link" onclick="scrollTo('wynn-las-vegas')">Wynn Las Vegas <span class="site-link-sub">wynnlasvegas.com</span></button>
+      <button class="site-link" onclick="scrollTo('resorts-world-las-vegas')">Resorts World LV <span class="site-link-sub">rwlasvegas.com</span></button>
+      <button class="site-link" onclick="scrollTo('marina-bay-sands')">Marina Bay Sands <span class="site-link-sub">marinabaysands.com</span></button>
+      <button class="site-link" onclick="scrollTo('mohegan-sun')">Mohegan Sun <span class="site-link-sub">mohegansun.com</span></button>
+    </div>
+  </div>
+
+  <!-- Quiet Luxury -->
+  <div class="category-group open" id="nav-quiet-luxury-hotels">
+    <button class="category-toggle" onclick="toggleCategory('nav-quiet-luxury-hotels')">
+      <span class="category-toggle-label">Quiet Luxury Hotels</span>
+      <span class="chevron">▶</span>
+    </button>
+    <div class="site-list">
+      <button class="site-link" onclick="scrollTo('aman')">Aman <span class="site-link-sub">aman.com</span></button>
+      <button class="site-link" onclick="scrollTo('auberge')">Auberge Resorts <span class="site-link-sub">aubergeresorts.com</span></button>
+      <button class="site-link" onclick="scrollTo('rosewood')">Rosewood Hotels <span class="site-link-sub">rosewoodhotels.com</span></button>
+      <button class="site-link" onclick="scrollTo('the-brando')">The Brando <span class="site-link-sub">thebrando.com</span></button>
+      <button class="site-link" onclick="scrollTo('belmond')">Belmond <span class="site-link-sub">belmond.com</span></button>
+    </div>
+  </div>
+
+  <!-- Booking UX -->
+  <div class="category-group open" id="nav-booking-reservation-ux">
+    <button class="category-toggle" onclick="toggleCategory('nav-booking-reservation-ux')">
+      <span class="category-toggle-label">Booking & Reservation UX</span>
+      <span class="chevron">▶</span>
+    </button>
+    <div class="site-list">
+      <button class="site-link" onclick="scrollTo('airbnb')">Airbnb <span class="site-link-sub">airbnb.com</span></button>
+      <button class="site-link" onclick="scrollTo('vrbo')">VRBO <span class="site-link-sub">vrbo.com</span></button>
+      <button class="site-link" onclick="scrollTo('opentable')">OpenTable <span class="site-link-sub">opentable.com</span></button>
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main id="main">
+
+  <!-- ═══════════════════════════════════════
+       CATEGORY 1: CASINO RESORT
+  ═══════════════════════════════════════ -->
+  <div class="category-section">
+    <div class="category-header">
+      <div class="category-eyebrow">Category 01</div>
+      <div class="category-title">Casino Resort</div>
+      <div class="category-synthesis">The casino resort category is defined by excess — visual, spatial, programmatic — and most sites reflect that faithfully, for better and worse. The strongest performers have learned to channel volume into coherence: Wynn uses restraint as a luxury signal in a category that rarely attempts it; Marina Bay Sands operates at a global brand register that has no real peer in the US market. The central lesson for Gold Strike is that digital experience is where the gap between a regional property and a world-class resort is most legible — and most closeable.</div>
+    </div>
+
+    <!-- Gold Strike -->
+    <div class="site-section" id="gold-strike">
+      <div class="site-header">
+        <div class="site-name">Gold Strike Casinos <span class="client-badge">Client</span></div>
+        <a href="https://goldstrikemississippi.com" class="site-domain" target="_blank">goldstrikemississippi.com</a>
+      </div>
+      <div class="viewport-toggle">
+        <button class="vt-btn active" onclick="setViewport(this, 'gold-strike', 'desktop')">Desktop</button>
+        <button class="vt-btn" onclick="setViewport(this, 'gold-strike', 'mobile')">Mobile</button>
+      </div>
+      <div class="screenshot-strip" id="strip-gold-strike-desktop">
+        <div class="screenshot-card">
+          <div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/gold-strike/casino-resort__gold-strike__home__desktop.png" alt="Home" onclick="openLightbox(this.src)"></div>
+          <div class="screenshot-label">Home</div>
+        </div>
+        <div class="screenshot-card">
+          <div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/gold-strike/casino-resort__gold-strike__casino__desktop.png" alt="Casino" onclick="openLightbox(this.src)"></div>
+          <div class="screenshot-label">Casino</div>
+        </div>
+        <div class="screenshot-card">
+          <div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/gold-strike/casino-resort__gold-strike__hotel-rooms__desktop.png" alt="Hotel Rooms" onclick="openLightbox(this.src)"></div>
+          <div class="screenshot-label">Hotel Rooms</div>
+        </div>
+        <div class="screenshot-card">
+          <div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/gold-strike/casino-resort__gold-strike__dining__desktop.png" alt="Dining" onclick="openLightbox(this.src)"></div>
+          <div class="screenshot-label">Dining</div>
+        </div>
+        <div class="screenshot-card">
+          <div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/gold-strike/casino-resort__gold-strike__entertainment__desktop.png" alt="Entertainment" onclick="openLightbox(this.src)"></div>
+          <div class="screenshot-label">Entertainment</div>
+        </div>
+        <div class="screenshot-card">
+          <div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/gold-strike/casino-resort__gold-strike__amenities__desktop.png" alt="Amenities" onclick="openLightbox(this.src)"></div>
+          <div class="screenshot-label">Amenities</div>
+        </div>
+        <div class="screenshot-card">
+          <div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/gold-strike/casino-resort__gold-strike__rewards__desktop.png" alt="Rewards" onclick="openLightbox(this.src)"></div>
+          <div class="screenshot-label">Rewards</div>
+        </div>
+      </div>
+      <div class="screenshot-strip" id="strip-gold-strike-mobile" style="display:none">
+        <div class="screenshot-card mobile-card">
+          <div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/gold-strike/casino-resort__gold-strike__home__mobile.png" alt="Home" onclick="openLightbox(this.src)"></div>
+          <div class="screenshot-label">Home</div>
+        </div>
+        <div class="screenshot-card mobile-card">
+          <div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/gold-strike/casino-resort__gold-strike__casino__mobile.png" alt="Casino" onclick="openLightbox(this.src)"></div>
+          <div class="screenshot-label">Casino</div>
+        </div>
+        <div class="screenshot-card mobile-card">
+          <div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/gold-strike/casino-resort__gold-strike__hotel-rooms__mobile.png" alt="Hotel" onclick="openLightbox(this.src)"></div>
+          <div class="screenshot-label">Hotel</div>
+        </div>
+        <div class="screenshot-card mobile-card">
+          <div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/gold-strike/casino-resort__gold-strike__dining__mobile.png" alt="Dining" onclick="openLightbox(this.src)"></div>
+          <div class="screenshot-label">Dining</div>
+        </div>
+        <div class="screenshot-card mobile-card">
+          <div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/gold-strike/casino-resort__gold-strike__entertainment__mobile.png" alt="Entertain." onclick="openLightbox(this.src)"></div>
+          <div class="screenshot-label">Entertain.</div>
+        </div>
+        <div class="screenshot-card mobile-card">
+          <div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/gold-strike/casino-resort__gold-strike__amenities__mobile.png" alt="Amenities" onclick="openLightbox(this.src)"></div>
+          <div class="screenshot-label">Amenities</div>
+        </div>
+        <div class="screenshot-card mobile-card">
+          <div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/gold-strike/casino-resort__gold-strike__rewards__mobile.png" alt="Rewards" onclick="openLightbox(this.src)"></div>
+          <div class="screenshot-label">Rewards</div>
+        </div>
+      </div>
+      <div class="analysis-block">
+        <div class="analysis-header-obs">A site that knows what it is but hasn't yet decided how to say it — functional, complete, and ready for a design language to match its ambitions.</div>
+        <div class="analysis-sections">
+          <div class="analysis-col">
+            <div class="analysis-col-label">Strengths</div>
+            <ul>
+              <li>Full-breadth coverage of the property — casino, hotel, dining, entertainment, rewards all present and navigable</li>
+              <li>Rewards program is surface-level navigable — visible in the main nav, not buried</li>
+              <li>Mobile structure is logically organized for thumb navigation</li>
+            </ul>
+          </div>
+          <div class="analysis-col">
+            <div class="analysis-col-label">Watch out for</div>
+            <ul>
+              <li>Visual hierarchy is flat — every section competes equally for attention, making it hard to lead a guest toward a booking decision</li>
+              <li>Photography is functional but not aspirational — the property looks like a property, not a destination</li>
+              <li>No editorial voice — the site describes rather than entices</li>
+            </ul>
+          </div>
+          <div class="analysis-col steal">
+            <div class="analysis-col-label">Steal this</div>
+            <ul>
+              <li>The structural completeness — all the right rooms exist, the redesign should preserve the IA while elevating everything within it</li>
+              <li>Rewards visibility — keep it prominent, make it feel like a benefit rather than a loyalty card program</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Wynn -->
+    <div class="site-section" id="wynn-las-vegas">
+      <div class="site-header">
+        <div class="site-name">Wynn Las Vegas</div>
+        <a href="https://wynnlasvegas.com" class="site-domain" target="_blank">wynnlasvegas.com</a>
+      </div>
+      <div class="viewport-toggle">
+        <button class="vt-btn active" onclick="setViewport(this, 'wynn-las-vegas', 'desktop')">Desktop</button>
+        <button class="vt-btn" onclick="setViewport(this, 'wynn-las-vegas', 'mobile')">Mobile</button>
+      </div>
+      <div class="screenshot-strip" id="strip-wynn-las-vegas-desktop">
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/wynn-las-vegas/casino-resort__wynn-las-vegas__home__desktop.png" alt="Home" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Home</div></div>
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/wynn-las-vegas/casino-resort__wynn-las-vegas__casino__desktop.png" alt="Casino" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Casino</div></div>
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/wynn-las-vegas/casino-resort__wynn-las-vegas__hotel-rooms__desktop.png" alt="Hotel" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Hotel</div></div>
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/wynn-las-vegas/casino-resort__wynn-las-vegas__dining__desktop.png" alt="Dining" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Dining</div></div>
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/wynn-las-vegas/casino-resort__wynn-las-vegas__entertainment__desktop.png" alt="Entertainment" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Entertainment</div></div>
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/wynn-las-vegas/casino-resort__wynn-las-vegas__rewards__desktop.png" alt="Rewards" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Rewards</div></div>
+      </div>
+      <div class="screenshot-strip" id="strip-wynn-las-vegas-mobile" style="display:none">
+        <div class="screenshot-card mobile-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/wynn-las-vegas/casino-resort__wynn-las-vegas__home__mobile.png" alt="Home" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Home</div></div>
+        <div class="screenshot-card mobile-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/wynn-las-vegas/casino-resort__wynn-las-vegas__casino__mobile.png" alt="Casino" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Casino</div></div>
+        <div class="screenshot-card mobile-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/wynn-las-vegas/casino-resort__wynn-las-vegas__hotel-rooms__mobile.png" alt="Hotel" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Hotel</div></div>
+        <div class="screenshot-card mobile-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/wynn-las-vegas/casino-resort__wynn-las-vegas__dining__mobile.png" alt="Dining" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Dining</div></div>
+        <div class="screenshot-card mobile-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/wynn-las-vegas/casino-resort__wynn-las-vegas__entertainment__mobile.png" alt="Entertain." onclick="openLightbox(this.src)"></div><div class="screenshot-label">Entertain.</div></div>
+        <div class="screenshot-card mobile-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/wynn-las-vegas/casino-resort__wynn-las-vegas__rewards__mobile.png" alt="Rewards" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Rewards</div></div>
+      </div>
+      <div class="analysis-block">
+        <div class="analysis-header-obs">The strongest design performer in the US casino category — Wynn uses restraint as a luxury signal in a space that almost never attempts it.</div>
+        <div class="analysis-sections">
+          <div class="analysis-col"><div class="analysis-col-label">Strengths</div><ul><li>Typography-led visual language — the brand earns its premium positioning through type decisions, not just photography</li><li>White space used assertively — pages breathe in a way that signals confidence rather than emptiness</li><li>Consistent design system across all page types, including rewards</li></ul></div>
+          <div class="analysis-col"><div class="analysis-col-label">Watch out for</div><ul><li>The restraint can tip toward coldness — very little warmth or human presence in the photography</li><li>Mobile navigation is elegant but slightly opaque for a first-time visitor</li></ul></div>
+          <div class="analysis-col steal"><div class="analysis-col-label">Steal this</div><ul><li>The type-first hierarchy — let font weight and size do the brand work rather than decorative elements</li><li>The rewards page treatment — loyalty framed as access and exclusivity, not points accumulation</li></ul></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Resorts World -->
+    <div class="site-section" id="resorts-world-las-vegas">
+      <div class="site-header">
+        <div class="site-name">Resorts World Las Vegas</div>
+        <a href="https://rwlasvegas.com" class="site-domain" target="_blank">rwlasvegas.com</a>
+      </div>
+      <div class="viewport-toggle">
+        <button class="vt-btn active" onclick="setViewport(this, 'resorts-world-las-vegas', 'desktop')">Desktop</button>
+        <button class="vt-btn" onclick="setViewport(this, 'resorts-world-las-vegas', 'mobile')">Mobile</button>
+      </div>
+      <div class="screenshot-strip" id="strip-resorts-world-las-vegas-desktop">
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/resorts-world-las-vegas/casino-resort__resorts-world-las-vegas__home__desktop.png" alt="Home" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Home</div></div>
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/resorts-world-las-vegas/casino-resort__resorts-world-las-vegas__casino__desktop.png" alt="Casino" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Casino</div></div>
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/resorts-world-las-vegas/casino-resort__resorts-world-las-vegas__hotel-rooms__desktop.png" alt="Hotel" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Hotel</div></div>
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/resorts-world-las-vegas/casino-resort__resorts-world-las-vegas__dining__desktop.png" alt="Dining" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Dining</div></div>
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/resorts-world-las-vegas/casino-resort__resorts-world-las-vegas__entertainment__desktop.png" alt="Entertainment" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Entertainment</div></div>
+      </div>
+      <div class="screenshot-strip" id="strip-resorts-world-las-vegas-mobile" style="display:none">
+        <div class="screenshot-card mobile-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/resorts-world-las-vegas/casino-resort__resorts-world-las-vegas__home__mobile.png" alt="Home" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Home</div></div>
+        <div class="screenshot-card mobile-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/resorts-world-las-vegas/casino-resort__resorts-world-las-vegas__casino__mobile.png" alt="Casino" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Casino</div></div>
+        <div class="screenshot-card mobile-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/resorts-world-las-vegas/casino-resort__resorts-world-las-vegas__hotel-rooms__mobile.png" alt="Hotel" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Hotel</div></div>
+        <div class="screenshot-card mobile-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/resorts-world-las-vegas/casino-resort__resorts-world-las-vegas__entertainment__mobile.png" alt="Entertain." onclick="openLightbox(this.src)"></div><div class="screenshot-label">Entertain.</div></div>
+      </div>
+      <div class="analysis-block">
+        <div class="analysis-header-obs">A new-build with ambition and budget that hasn't yet translated either into a coherent digital design system — visually busy in a way that undersells the property.</div>
+        <div class="analysis-sections">
+          <div class="analysis-col"><div class="analysis-col-label">Strengths</div><ul><li>Multi-brand hotel structure is clearly communicated — Hilton, Conrad, Crockfords differentiated within a parent IA</li><li>Entertainment programming given prominent placement — the concerts and nightlife offer are front-of-mind</li></ul></div>
+          <div class="analysis-col"><div class="analysis-col-label">Watch out for</div><ul><li>Visual language feels inconsistent across sections — like multiple design teams worked in isolation</li><li>Homepage is trying to do too much simultaneously — no clear conversion priority</li><li>Photography quality varies significantly across page types</li></ul></div>
+          <div class="analysis-col steal"><div class="analysis-col-label">Steal this</div><ul><li>The multi-hotel parent/property IA model — useful reference if Gold Strike ever operates multiple venues</li><li>Entertainment programming as a top-level nav destination — signals the full resort offer up front</li></ul></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Marina Bay Sands -->
+    <div class="site-section" id="marina-bay-sands">
+      <div class="site-header">
+        <div class="site-name">Marina Bay Sands</div>
+        <a href="https://marinabaysands.com" class="site-domain" target="_blank">marinabaysands.com</a>
+      </div>
+      <div class="viewport-toggle">
+        <button class="vt-btn active" onclick="setViewport(this, 'marina-bay-sands', 'desktop')">Desktop</button>
+        <button class="vt-btn" onclick="setViewport(this, 'marina-bay-sands', 'mobile')">Mobile</button>
+      </div>
+      <div class="screenshot-strip" id="strip-marina-bay-sands-desktop">
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/marina-bay-sands/casino-resort__marina-bay-sands__home__desktop.png" alt="Home" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Home</div></div>
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/marina-bay-sands/casino-resort__marina-bay-sands__casino__desktop.png" alt="Casino" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Casino</div></div>
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/marina-bay-sands/casino-resort__marina-bay-sands__hotel-rooms__desktop.png" alt="Hotel" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Hotel</div></div>
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/marina-bay-sands/casino-resort__marina-bay-sands__dining__desktop.png" alt="Dining" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Dining</div></div>
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/marina-bay-sands/casino-resort__marina-bay-sands__entertainment__desktop.png" alt="Entertainment" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Entertainment</div></div>
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/marina-bay-sands/casino-resort__marina-bay-sands__rewards__desktop.png" alt="Rewards" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Rewards</div></div>
+      </div>
+      <div class="screenshot-strip" id="strip-marina-bay-sands-mobile" style="display:none">
+        <div class="screenshot-card mobile-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/marina-bay-sands/casino-resort__marina-bay-sands__home__mobile.png" alt="Home" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Home</div></div>
+        <div class="screenshot-card mobile-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/marina-bay-sands/casino-resort__marina-bay-sands__casino__mobile.png" alt="Casino" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Casino</div></div>
+        <div class="screenshot-card mobile-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/marina-bay-sands/casino-resort__marina-bay-sands__hotel-rooms__mobile.png" alt="Hotel" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Hotel</div></div>
+        <div class="screenshot-card mobile-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/marina-bay-sands/casino-resort__marina-bay-sands__entertainment__mobile.png" alt="Entertain." onclick="openLightbox(this.src)"></div><div class="screenshot-label">Entertain.</div></div>
+        <div class="screenshot-card mobile-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/marina-bay-sands/casino-resort__marina-bay-sands__rewards__mobile.png" alt="Rewards" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Rewards</div></div>
+      </div>
+      <div class="analysis-block">
+        <div class="analysis-header-obs">The global benchmark — MBS operates at a brand register no US casino resort has attempted, and the digital experience matches the physical ambition.</div>
+        <div class="analysis-sections">
+          <div class="analysis-col"><div class="analysis-col-label">Strengths</div><ul><li>Photography is cinematic and consistent — every page feels like it belongs to the same world</li><li>Design system maturity is evident across all page types — clearly a single coherent product</li><li>The scale of the offer (hotel, casino, dining, shopping, entertainment, MICE) is communicated without overwhelming the page</li></ul></div>
+          <div class="analysis-col"><div class="analysis-col-label">Watch out for</div><ul><li>Information density on some interior pages tips into complexity — too many options presented simultaneously</li><li>The global scale can feel impersonal — the warmth of a specific place gets lost</li></ul></div>
+          <div class="analysis-col steal"><div class="analysis-col-label">Steal this</div><ul><li>Photography art direction as a design system component — the images aren't just decoration, they're the UX</li><li>The offer hierarchy on the homepage — a clear read of the resort's full scope without any single section dominating</li></ul></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mohegan Sun -->
+    <div class="site-section" id="mohegan-sun">
+      <div class="site-header">
+        <div class="site-name">Mohegan Sun</div>
+        <a href="https://mohegansun.com" class="site-domain" target="_blank">mohegansun.com</a>
+      </div>
+      <div class="viewport-toggle">
+        <button class="vt-btn active" onclick="setViewport(this, 'mohegan-sun', 'desktop')">Desktop</button>
+        <button class="vt-btn" onclick="setViewport(this, 'mohegan-sun', 'mobile')">Mobile</button>
+      </div>
+      <div class="screenshot-strip" id="strip-mohegan-sun-desktop">
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/mohegan-sun/casino-resort__mohegan-sun__home__desktop.png" alt="Home" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Home</div></div>
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/mohegan-sun/casino-resort__mohegan-sun__casino__desktop.png" alt="Casino" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Casino</div></div>
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/mohegan-sun/casino-resort__mohegan-sun__hotel-rooms__desktop.png" alt="Hotel" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Hotel</div></div>
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/mohegan-sun/casino-resort__mohegan-sun__dining__desktop.png" alt="Dining" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Dining</div></div>
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/mohegan-sun/casino-resort__mohegan-sun__entertainment__desktop.png" alt="Entertainment" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Entertainment</div></div>
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/mohegan-sun/casino-resort__mohegan-sun__rewards__desktop.png" alt="Rewards" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Rewards</div></div>
+      </div>
+      <div class="screenshot-strip" id="strip-mohegan-sun-mobile" style="display:none">
+        <div class="screenshot-card mobile-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/mohegan-sun/casino-resort__mohegan-sun__home__mobile.png" alt="Home" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Home</div></div>
+        <div class="screenshot-card mobile-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/mohegan-sun/casino-resort__mohegan-sun__casino__mobile.png" alt="Casino" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Casino</div></div>
+        <div class="screenshot-card mobile-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/mohegan-sun/casino-resort__mohegan-sun__hotel-rooms__mobile.png" alt="Hotel" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Hotel</div></div>
+        <div class="screenshot-card mobile-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/mohegan-sun/casino-resort__mohegan-sun__dining__mobile.png" alt="Dining" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Dining</div></div>
+        <div class="screenshot-card mobile-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/mohegan-sun/casino-resort__mohegan-sun__entertainment__mobile.png" alt="Entertain." onclick="openLightbox(this.src)"></div><div class="screenshot-label">Entertain.</div></div>
+        <div class="screenshot-card mobile-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/mohegan-sun/casino-resort__mohegan-sun__rewards__mobile.png" alt="Rewards" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Rewards</div></div>
+      </div>
+      <div class="analysis-block">
+        <div class="analysis-header-obs">The closest regional analog to Gold Strike — a large, full-service tribal casino resort with a loyal local base and an earnest but uneven digital presence.</div>
+        <div class="analysis-sections">
+          <div class="analysis-col"><div class="analysis-col-label">Strengths</div><ul><li>Rewards program (Momentum) is well-integrated and clearly communicated across the site</li><li>The breadth of the entertainment offer comes through — arena concerts, dining, spa, shopping all visible</li></ul></div>
+          <div class="analysis-col"><div class="analysis-col-label">Watch out for</div><ul><li>Visual language is dated — the site looks like it was designed circa 2018 and hasn't been significantly updated</li><li>Mobile experience feels compressed rather than designed — the desktop layout adapted rather than rethought</li><li>Promotional content overwhelms editorial content — the site reads as a circulars page, not a destination</li></ul></div>
+          <div class="analysis-col steal"><div class="analysis-col-label">Steal this</div><ul><li>Momentum rewards integration — cross-site consistency of the loyalty program is genuinely useful as a structural reference</li></ul></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       CATEGORY 2: QUIET LUXURY HOTELS
+  ═══════════════════════════════════════ -->
+  <div class="category-section">
+    <div class="category-header">
+      <div class="category-eyebrow">Category 02</div>
+      <div class="category-title">Quiet Luxury Hotels & Experiences</div>
+      <div class="category-synthesis">Quiet luxury hospitality has cracked something the casino category hasn't: using digital restraint as a proxy for physical quality. These sites don't sell amenities — they sell the feeling of not needing to be sold to. Navigation trusts the guest; photography does the convincing; the booking flow is almost an afterthought, which paradoxically makes it more effective. For Gold Strike, this category is less about literal feature borrowing and more about understanding the register a site can operate in when it stops trying to cover everything at once.</div>
+    </div>
+
+    <!-- Aman -->
+    <div class="site-section" id="aman">
+      <div class="site-header">
+        <div class="site-name">Aman</div>
+        <a href="https://aman.com" class="site-domain" target="_blank">aman.com</a>
+      </div>
+      <div class="viewport-toggle">
+        <button class="vt-btn active" onclick="setViewport(this, 'aman', 'desktop')">Desktop</button>
+        <button class="vt-btn" onclick="setViewport(this, 'aman', 'mobile')">Mobile</button>
+      </div>
+      <div class="screenshot-strip" id="strip-aman-desktop">
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/quiet-luxury-hotels/aman/quiet-luxury-hotels__aman__home__desktop.png" alt="Home" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Home</div></div>
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/quiet-luxury-hotels/aman/quiet-luxury-hotels__aman__properties__desktop.png" alt="Properties" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Properties</div></div>
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/quiet-luxury-hotels/aman/quiet-luxury-hotels__aman__destinations__desktop.png" alt="Destinations" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Destinations</div></div>
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/quiet-luxury-hotels/aman/quiet-luxury-hotels__aman__experiences__desktop.png" alt="Experiences" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Experiences</div></div>
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/quiet-luxury-hotels/aman/quiet-luxury-hotels__aman__offers__desktop.png" alt="Offers" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Offers</div></div>
+      </div>
+      <div class="screenshot-strip" id="strip-aman-mobile" style="display:none">
+        <div class="screenshot-card mobile-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/quiet-luxury-hotels/aman/quiet-luxury-hotels__aman__home__mobile.png" alt="Home" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Home</div></div>
+        <div class="screenshot-card mobile-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/quiet-luxury-hotels/aman/quiet-luxury-hotels__aman__properties__mobile.png" alt="Properties" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Properties</div></div>
+        <div class="screenshot-card mobile-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/quiet-luxury-hotels/aman/quiet-luxury-hotels__aman__destinations__mobile.png" alt="Destinations" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Destinations</div></div>
+        <div class="screenshot-card mobile-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/quiet-luxury-hotels/aman/quiet-luxury-hotels__aman__experiences__mobile.png" alt="Experiences" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Experiences</div></div>
+        <div class="screenshot-card mobile-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/quiet-luxury-hotels/aman/quiet-luxury-hotels__aman__offers__mobile.png" alt="Offers" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Offers</div></div>
+      </div>
+      <div class="analysis-block">
+        <div class="analysis-header-obs">The category standard-bearer — Aman has built a digital experience where navigating the site is itself a form of anticipation for staying there.</div>
+        <div class="analysis-sections">
+          <div class="analysis-col"><div class="analysis-col-label">Strengths</div><ul><li>Photography functions as primary navigation — you understand what Aman is before you've read a word</li><li>The unhurried pace of the site is a deliberate brand decision — nothing is urgent, nothing is promoted</li><li>Offers page maintains the brand register even under promotional pressure — a difficult thing to pull off</li></ul></div>
+          <div class="analysis-col"><div class="analysis-col-label">Watch out for</div><ul><li>Accessibility — the spare approach sometimes sacrifices legibility for aesthetics</li><li>The booking flow is deliberately distant — a casino resort can't afford that level of conversion friction</li></ul></div>
+          <div class="analysis-col steal"><div class="analysis-col-label">Steal this</div><ul><li>Photography-as-navigation — the images aren't supporting the IA, they are the IA</li><li>The offers page brand consistency — promotions don't have to look like promotions</li></ul></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Auberge -->
+    <div class="site-section" id="auberge">
+      <div class="site-header">
+        <div class="site-name">Auberge Resorts</div>
+        <a href="https://aubergeresorts.com" class="site-domain" target="_blank">aubergeresorts.com</a>
+      </div>
+      <div class="viewport-toggle">
+        <button class="vt-btn active" onclick="setViewport(this, 'auberge', 'desktop')">Desktop</button>
+        <button class="vt-btn" onclick="setViewport(this, 'auberge', 'mobile')">Mobile</button>
+      </div>
+      <div class="screenshot-strip" id="strip-auberge-desktop">
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/quiet-luxury-hotels/auberge/quiet-luxury-hotels__auberge__home__desktop.png" alt="Home" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Home</div></div>
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/quiet-luxury-hotels/auberge/quiet-luxury-hotels__auberge__properties__desktop.png" alt="Properties" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Properties</div></div>
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/quiet-luxury-hotels/auberge/quiet-luxury-hotels__auberge__itineraries__desktop.png" alt="Itineraries" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Itineraries</div></div>
+      </div>
+      <div class="screenshot-strip" id="strip-auberge-mobile" style="display:none">
+        <div class="screenshot-card mobile-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/quiet-luxury-hotels/auberge/quiet-luxury-hotels__auberge__home__mobile.png" alt="Home" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Home</div></div>
+        <div class="screenshot-card mobile-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/quiet-luxury-hotels/auberge/quiet-luxury-hotels__auberge__properties__mobile.png" alt="Properties" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Properties</div></div>
+        <div class="screenshot-card mobile-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/quiet-luxury-hotels/auberge/quiet-luxury-hotels__auberge__itineraries__mobile.png" alt="Itineraries" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Itineraries</div></div>
+      </div>
+      <div class="analysis-block">
+        <div class="analysis-header-obs">A masterclass in collection-brand IA — Auberge makes each property feel individual while the parent brand provides coherent context and trust.</div>
+        <div class="analysis-sections">
+          <div class="analysis-col"><div class="analysis-col-label">Strengths</div><ul><li>The parent/property relationship is the clearest in its class — you understand the collection model immediately</li><li>Itineraries as a nav destination is smart — it reframes the browse experience around aspiration rather than inventory</li><li>Property cards give enough to intrigue without overwhelming</li></ul></div>
+          <div class="analysis-col"><div class="analysis-col-label">Watch out for</div><ul><li>Mobile properties index is dense — the card grid needs more breathing room at small viewports</li></ul></div>
+          <div class="analysis-col steal"><div class="analysis-col-label">Steal this</div><ul><li>Itineraries as editorial content — positions the brand as a curator of experiences, not just a room inventory</li><li>The collection model IA — relevant if Gold Strike expands to multiple venues</li></ul></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rosewood -->
+    <div class="site-section" id="rosewood">
+      <div class="site-header">
+        <div class="site-name">Rosewood Hotels</div>
+        <a href="https://rosewoodhotels.com" class="site-domain" target="_blank">rosewoodhotels.com</a>
+      </div>
+      <div class="viewport-toggle">
+        <button class="vt-btn active" onclick="setViewport(this, 'rosewood', 'desktop')">Desktop</button>
+        <button class="vt-btn" onclick="setViewport(this, 'rosewood', 'mobile')">Mobile</button>
+      </div>
+      <div class="screenshot-strip" id="strip-rosewood-desktop">
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/quiet-luxury-hotels/rosewood/quiet-luxury-hotels__rosewood__home__desktop.png" alt="Home" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Home</div></div>
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/quiet-luxury-hotels/rosewood/quiet-luxury-hotels__rosewood__properties__desktop.png" alt="Properties" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Properties</div></div>
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/quiet-luxury-hotels/rosewood/quiet-luxury-hotels__rosewood__property-detail__desktop.png" alt="Property Detail" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Property Detail</div></div>
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/quiet-luxury-hotels/rosewood/quiet-luxury-hotels__rosewood__dining__desktop.png" alt="Dining" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Dining</div></div>
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/quiet-luxury-hotels/rosewood/quiet-luxury-hotels__rosewood__wellness__desktop.png" alt="Wellness" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Wellness</div></div>
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/quiet-luxury-hotels/rosewood/quiet-luxury-hotels__rosewood__reservations__desktop.png" alt="Reservations" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Reservations</div></div>
+      </div>
+      <div class="screenshot-strip" id="strip-rosewood-mobile" style="display:none">
+        <div class="screenshot-card mobile-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/quiet-luxury-hotels/rosewood/quiet-luxury-hotels__rosewood__home__mobile.png" alt="Home" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Home</div></div>
+        <div class="screenshot-card mobile-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/quiet-luxury-hotels/rosewood/quiet-luxury-hotels__rosewood__properties__mobile.png" alt="Properties" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Properties</div></div>
+        <div class="screenshot-card mobile-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/quiet-luxury-hotels/rosewood/quiet-luxury-hotels__rosewood__dining__mobile.png" alt="Dining" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Dining</div></div>
+        <div class="screenshot-card mobile-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/quiet-luxury-hotels/rosewood/quiet-luxury-hotels__rosewood__wellness__mobile.png" alt="Wellness" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Wellness</div></div>
+        <div class="screenshot-card mobile-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/quiet-luxury-hotels/rosewood/quiet-luxury-hotels__rosewood__reservations__mobile.png" alt="Reservations" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Reservations</div></div>
+      </div>
+      <div class="analysis-block">
+        <div class="analysis-header-obs">More accessible than Aman, more coherent than most — Rosewood's "A Sense of Place" editorial framing is one of the smarter content strategies in luxury hospitality.</div>
+        <div class="analysis-sections">
+          <div class="analysis-col"><div class="analysis-col-label">Strengths</div><ul><li>The editorial framing gives the site a genuine point of view — not just a property catalogue</li><li>Booking flow integration is better than most luxury peers — the reservation entry point is present without being pushy</li><li>Wellness as a top-level destination signals where the market is moving</li></ul></div>
+          <div class="analysis-col"><div class="analysis-col-label">Watch out for</div><ul><li>Mobile execution is slightly below the desktop experience — some layout decisions don't translate cleanly</li><li>The property detail page is content-rich but could be better organized for a guest making a booking decision</li></ul></div>
+          <div class="analysis-col steal"><div class="analysis-col-label">Steal this</div><ul><li>"A Sense of Place" as a content strategy — positioning each venue's local character as the primary differentiator</li><li>The reservation page — clean, functional, maintains brand tone without disruption</li></ul></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- The Brando -->
+    <div class="site-section" id="the-brando">
+      <div class="site-header">
+        <div class="site-name">The Brando</div>
+        <a href="https://thebrando.com" class="site-domain" target="_blank">thebrando.com</a>
+      </div>
+      <div class="viewport-toggle">
+        <button class="vt-btn active" onclick="setViewport(this, 'the-brando', 'desktop')">Desktop</button>
+        <button class="vt-btn" onclick="setViewport(this, 'the-brando', 'mobile')">Mobile</button>
+      </div>
+      <div class="screenshot-strip" id="strip-the-brando-desktop">
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/quiet-luxury-hotels/the-brando/quiet-luxury-hotels__the-brando__home__desktop.png" alt="Home" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Home</div></div>
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/quiet-luxury-hotels/the-brando/quiet-luxury-hotels__the-brando__accommodations__desktop.png" alt="Accommodations" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Accommodations</div></div>
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/quiet-luxury-hotels/the-brando/quiet-luxury-hotels__the-brando__dining__desktop.png" alt="Dining" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Dining</div></div>
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/quiet-luxury-hotels/the-brando/quiet-luxury-hotels__the-brando__experiences__desktop.png" alt="Experiences" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Experiences</div></div>
+      </div>
+      <div class="screenshot-strip" id="strip-the-brando-mobile" style="display:none">
+        <div class="screenshot-card mobile-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/quiet-luxury-hotels/the-brando/quiet-luxury-hotels__the-brando__home__mobile.png" alt="Home" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Home</div></div>
+        <div class="screenshot-card mobile-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/quiet-luxury-hotels/the-brando/quiet-luxury-hotels__the-brando__accommodations__mobile.png" alt="Accommodations" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Accommodations</div></div>
+        <div class="screenshot-card mobile-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/quiet-luxury-hotels/the-brando/quiet-luxury-hotels__the-brando__dining__mobile.png" alt="Dining" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Dining</div></div>
+        <div class="screenshot-card mobile-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/quiet-luxury-hotels/the-brando/quiet-luxury-hotels__the-brando__experiences__mobile.png" alt="Experiences" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Experiences</div></div>
+      </div>
+      <div class="analysis-block">
+        <div class="analysis-header-obs">Small site, outsized confidence — The Brando is the rare case where the digital experience genuinely mirrors the experience of being there.</div>
+        <div class="analysis-sections">
+          <div class="analysis-col"><div class="analysis-col-label">Strengths</div><ul><li>Every page feels considered — nothing is default, nothing is a template</li><li>The color palette and texture work together to evoke the physical place without describing it</li><li>Content is spare but specific — you know exactly what kind of place this is after 30 seconds</li></ul></div>
+          <div class="analysis-col"><div class="analysis-col-label">Watch out for</div><ul><li>Scroll-triggered animations impacted capture quality on some pages — worth reviewing live for full effect</li><li>The small scale of the property means some patterns don't translate to a full-service resort</li></ul></div>
+          <div class="analysis-col steal"><div class="analysis-col-label">Steal this</div><ul><li>The idea that atmosphere is a design deliverable — The Brando has designed a feeling, not just a layout</li><li>Restraint under promotional pressure — even the booking CTA maintains the site's overall tone</li></ul></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Belmond -->
+    <div class="site-section" id="belmond">
+      <div class="site-header">
+        <div class="site-name">Belmond</div>
+        <a href="https://belmond.com" class="site-domain" target="_blank">belmond.com</a>
+      </div>
+      <div class="viewport-toggle">
+        <button class="vt-btn active" onclick="setViewport(this, 'belmond', 'desktop')">Desktop</button>
+      </div>
+      <div class="screenshot-strip" id="strip-belmond-desktop">
+        <div class="placeholder-card screenshot-card" style="width:200px">
+          <div class="screenshot-img-wrap" style="height:120px;display:flex;align-items:center;justify-content:center;">
+            <div class="placeholder-text">Homepage only — interior pages blocked by LVMH bot protection. Recommend manual capture.</div>
+          </div>
+          <div class="screenshot-label">Homepage (not captured)</div>
+        </div>
+      </div>
+      <div class="analysis-block">
+        <div class="analysis-header-obs">Recently redesigned with genuine design system maturity — Belmond shows how a heritage brand modernizes without losing authority, even if we couldn't fully capture it.</div>
+        <div class="analysis-sections">
+          <div class="analysis-col"><div class="analysis-col-label">Strengths</div><ul><li>Post-redesign visual language is refined and confident — the LVMH ownership shows in the production quality</li><li>Strong model for how a legacy brand with iconic properties can feel contemporary without chasing trends</li></ul></div>
+          <div class="analysis-col"><div class="analysis-col-label">Watch out for</div><ul><li>Interior pages could not be captured — LVMH enterprise bot protection blocks automated screenshot tools</li><li>Worth visiting live to assess the full booking flow and property detail pages</li></ul></div>
+          <div class="analysis-col steal"><div class="analysis-col-label">Steal this</div><ul><li>The modernization approach — how to feel fresh without abandoning what made the brand valuable</li></ul></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       CATEGORY 3: BOOKING & RESERVATION UX
+  ═══════════════════════════════════════ -->
+  <div class="category-section">
+    <div class="category-header">
+      <div class="category-eyebrow">Category 03</div>
+      <div class="category-title">Booking & Reservation UX</div>
+      <div class="category-synthesis">The booking and reservation category reveals something the hospitality industry has largely failed to absorb: trust is a design problem, not a copy problem. Airbnb and VRBO have built checkout flows where the anxiety of a large purchase is managed through information architecture — progressive disclosure, embedded social proof, transparent pricing — rather than reassuring language. OpenTable solved the restaurant reservation problem so thoroughly it became infrastructure. The lesson for Gold Strike is that friction in the booking flow isn't just a conversion issue, it's a brand issue — every unnecessary step signals that the property doesn't value the guest's time.</div>
+    </div>
+
+    <!-- Airbnb -->
+    <div class="site-section" id="airbnb">
+      <div class="site-header">
+        <div class="site-name">Airbnb</div>
+        <a href="https://airbnb.com" class="site-domain" target="_blank">airbnb.com</a>
+      </div>
+      <div class="viewport-toggle">
+        <button class="vt-btn active" onclick="setViewport(this, 'airbnb', 'desktop')">Desktop</button>
+        <button class="vt-btn" onclick="setViewport(this, 'airbnb', 'mobile')">Mobile</button>
+      </div>
+      <div class="screenshot-strip" id="strip-airbnb-desktop">
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/booking-reservation-ux/airbnb/booking-reservation-ux__airbnb__home__desktop.png" alt="Home" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Home</div></div>
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/booking-reservation-ux/airbnb/booking-reservation-ux__airbnb__search-results__desktop.png" alt="Search Results" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Search Results</div></div>
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/booking-reservation-ux/airbnb/booking-reservation-ux__airbnb__experiences__desktop.png" alt="Experiences" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Experiences</div></div>
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/booking-reservation-ux/airbnb/screencapture-airbnb-rooms-770231827155715190-2026-05-01-13_25_45.png" alt="Listing Detail" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Listing Detail</div></div>
+      </div>
+      <div class="screenshot-strip" id="strip-airbnb-mobile" style="display:none">
+        <div class="screenshot-card mobile-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/booking-reservation-ux/airbnb/screencapture-airbnb-2026-05-01-13_24_45.png" alt="Home" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Home</div></div>
+        <div class="screenshot-card mobile-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/booking-reservation-ux/airbnb/booking-reservation-ux__airbnb__search-results__mobile.png" alt="Search" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Search</div></div>
+        <div class="screenshot-card mobile-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/booking-reservation-ux/airbnb/booking-reservation-ux__airbnb__experiences__mobile.png" alt="Experiences" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Experiences</div></div>
+      </div>
+      <div class="analysis-block">
+        <div class="analysis-header-obs">The benchmark everything else gets measured against — Airbnb has turned the search-to-book flow into a trust-building machine where every interaction is designed to reduce anxiety.</div>
+        <div class="analysis-sections">
+          <div class="analysis-col"><div class="analysis-col-label">Strengths</div><ul><li>Search results split-view (list + map) gives two mental models simultaneously — price-shopping and location-anchoring</li><li>Trust signals embedded in the flow — guest favorites, superhost badges, review counts — never feel bolted on</li><li>Experiences as a separate nav destination reframes the platform beyond accommodation</li><li>All-fees-included pricing transparency is now a conversion advantage, not just an ethical choice</li></ul></div>
+          <div class="analysis-col"><div class="analysis-col-label">Watch out for</div><ul><li>Mobile search defaults to map view — shows pins without listings, which can be disorienting on first visit</li><li>The SPA architecture means automated screenshot capture is unreliable — the live experience is the reference</li></ul></div>
+          <div class="analysis-col steal"><div class="analysis-col-label">Steal this</div><ul><li>Wishlist as a conversion tool — low-commitment engagement that keeps users in the funnel</li><li>The trust signal architecture — how social proof is embedded structurally, not added as a review widget</li><li>Experiences as a product category — relevant model for Gold Strike's entertainment and dining program</li></ul></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VRBO -->
+    <div class="site-section" id="vrbo">
+      <div class="site-header">
+        <div class="site-name">VRBO</div>
+        <a href="https://vrbo.com" class="site-domain" target="_blank">vrbo.com</a>
+      </div>
+      <div class="viewport-toggle">
+        <button class="vt-btn active" onclick="setViewport(this, 'vrbo', 'desktop')">Desktop (manual capture)</button>
+      </div>
+      <div class="screenshot-strip" id="strip-vrbo-desktop">
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/booking-reservation-ux/vrbo/screencapture-vrbo-2026-05-01-13_32_14.png" alt="Home" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Home</div></div>
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/booking-reservation-ux/vrbo/screencapture-vrbo-search-2026-05-01-13_41_41.png" alt="Search Results" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Search Results</div></div>
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/booking-reservation-ux/vrbo/screencapture-vrbo-2063723-2026-05-01-13_34_18.png" alt="Listing Detail" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Listing Detail</div></div>
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/booking-reservation-ux/vrbo/screencapture-vrbo-checkout-session-0cc571ea-b723-43b3-ad22-d231619f82a7-2026-05-01-13_36_52.png" alt="Checkout Step 1" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Checkout (1)</div></div>
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/booking-reservation-ux/vrbo/screencapture-vrbo-checkout-session-0cc571ea-b723-43b3-ad22-d231619f82a7-2026-05-01-13_37_25.png" alt="Checkout Step 2" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Checkout (2)</div></div>
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/booking-reservation-ux/vrbo/screencapture-vrbo-trips-egti-VPM-EY1-78YT-2026-05-01-13_43_07.png" alt="Trip Itinerary" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Trip Itinerary</div></div>
+      </div>
+      <div class="analysis-block">
+        <div class="analysis-header-obs">The fullest funnel capture in this category — VRBO shows how a booking flow manages trust across every stage from search to post-confirmation.</div>
+        <div class="analysis-sections">
+          <div class="analysis-col"><div class="analysis-col-label">Strengths</div><ul><li>Search results are clean and card-hierarchy is well-considered — price, location, and rating given appropriate visual weight</li><li>Checkout flow is comprehensive — damage protection, cancellation policy, house rules all surface before payment, not after</li><li>Trip itinerary view post-booking is a useful model for Gold Strike's reservation confirmation experience</li></ul></div>
+          <div class="analysis-col"><div class="analysis-col-label">Watch out for</div><ul><li>Checkout is long — the density of required information creates friction even when the content is useful</li><li>The VrboCare and loyalty messaging in the checkout feels like an upsell layer rather than a benefit</li></ul></div>
+          <div class="analysis-col steal"><div class="analysis-col-label">Steal this</div><ul><li>The post-booking trip view — treating the confirmation as a planning tool, not just a receipt</li><li>Progressive trust disclosure in checkout — surfacing cancellation and protection terms before they're needed</li></ul></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- OpenTable -->
+    <div class="site-section" id="opentable">
+      <div class="site-header">
+        <div class="site-name">OpenTable</div>
+        <a href="https://opentable.com" class="site-domain" target="_blank">opentable.com</a>
+      </div>
+      <div class="viewport-toggle">
+        <button class="vt-btn active" onclick="setViewport(this, 'opentable', 'desktop')">Desktop (manual capture)</button>
+      </div>
+      <div class="screenshot-strip" id="strip-opentable-desktop">
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/booking-reservation-ux/opentable/screencapture-opentable-2026-05-01-12_52_02.png" alt="Home" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Home</div></div>
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/booking-reservation-ux/opentable/screencapture-opentable-hemenways-2026-05-01-12_52_30.png" alt="Restaurant Listing" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Restaurant Listing</div></div>
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/booking-reservation-ux/opentable/screencapture-opentable-hemenways-2026-05-01-12_53_23.png" alt="Listing (scrolled)" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Listing (scrolled)</div></div>
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/booking-reservation-ux/opentable/screencapture-opentable-red-stripe-2026-05-01-12_56_01.png" alt="Listing 2" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Listing (alt)</div></div>
+        <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/booking-reservation-ux/opentable/screencapture-opentable-booking-details-2026-05-01-12_56_33.png" alt="Booking Step" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Booking Step</div></div>
+      </div>
+      <div class="analysis-block">
+        <div class="analysis-header-obs">Reservation as a solved product — OpenTable has reduced dining booking to its minimum viable friction, and the booking step itself is so stripped down it's almost invisible.</div>
+        <div class="analysis-sections">
+          <div class="analysis-col"><div class="analysis-col-label">Strengths</div><ul><li>Restaurant listing pages surface everything a diner needs — reviews, photos, menu links, availability — in a coherent hierarchy</li><li>The booking confirmation step is remarkably lean — party size, time, and contact info, nothing more</li><li>Homepage search is instant and context-aware — Providence-specific results on load based on location</li></ul></div>
+          <div class="analysis-col"><div class="analysis-col-label">Watch out for</div><ul><li>The brand voice essentially disappears in the booking step — purely functional, no warmth</li><li>Mobile experience is functionally fine but design-thin — the restaurant pages especially feel compressed</li></ul></div>
+          <div class="analysis-col steal"><div class="analysis-col-label">Steal this</div><ul><li>The booking step economy — name, time, party size, phone. That's it. Gold Strike's dining reservation flow should aspire to this level of respect for the guest's time</li><li>The way availability is surfaced on the listing page — inline, without redirecting to a separate booking engine</li></ul></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- LIGHTBOX -->
+<div id="lightbox" onclick="closeLightbox()">
+  <button id="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="lightbox-img" src="" alt="Full size screenshot">
+</div>
+
+<script>
+  // ── Category accordion ──
+  function toggleCategory(id) {
+    const el = document.getElementById(id);
+    el.classList.toggle('open');
+  }
+
+  // ── Scroll to site section ──
+  function scrollTo(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    // Update active state in sidebar
+    document.querySelectorAll('.site-link').forEach(l => l.classList.remove('active'));
+    // Find the button that targets this id
+    document.querySelectorAll('.site-link').forEach(l => {
+      if (l.getAttribute('onclick')?.includes(`'${id}'`)) {
+        l.classList.add('active');
+      }
+    });
+  }
+
+  // ── Viewport toggle ──
+  function setViewport(btn, site, viewport) {
+    // Toggle button state
+    btn.closest('.viewport-toggle').querySelectorAll('.vt-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    // Show/hide strips
+    const desktop = document.getElementById(`strip-${site}-desktop`);
+    const mobile = document.getElementById(`strip-${site}-mobile`);
+    if (desktop) desktop.style.display = viewport === 'desktop' ? 'flex' : 'none';
+    if (mobile) mobile.style.display = viewport === 'mobile' ? 'flex' : 'none';
+  }
+
+  // ── Lightbox ──
+  function openLightbox(src) {
+    document.getElementById('lightbox-img').src = src;
+    document.getElementById('lightbox').classList.add('open');
+  }
+
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+    document.getElementById('lightbox-img').src = '';
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeLightbox();
+  });
+
+  // ── Active sidebar tracking on scroll ──
+  const main = document.getElementById('main');
+  const sections = document.querySelectorAll('.site-section');
+
+  main.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(section => {
+      const top = section.offsetTop - 60;
+      if (main.scrollTop >= top) current = section.id;
+    });
+
+    if (current) {
+      document.querySelectorAll('.site-link').forEach(l => {
+        l.classList.remove('active');
+        if (l.getAttribute('onclick')?.includes(`'${current}'`)) {
+          l.classList.add('active');
+        }
+      });
+    }
+  });
+</script>
+</body>
+</html>
