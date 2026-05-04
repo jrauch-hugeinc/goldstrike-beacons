@@ -51,6 +51,28 @@
     border-bottom: 1px solid var(--border);
   }
 
+  .download-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 10px;
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--gray-4);
+    text-decoration: none;
+    letter-spacing: 0.02em;
+    padding: 4px 8px;
+    border: 1px solid var(--gray-3);
+    border-radius: 3px;
+    background: var(--gray-0);
+    cursor: pointer;
+  }
+
+  .download-link:hover {
+    color: var(--gray-6);
+    border-color: var(--gray-5);
+  }
+
   .project-label {
     font-size: 9px;
     font-weight: 600;
@@ -311,32 +333,33 @@
 
   /* ── ANALYSIS ── */
   .analysis-block {
-    max-width: 680px;
+    max-width: 100%;
   }
 
   .analysis-header-obs {
-    font-size: 13px;
+    font-size: 17px;
     font-weight: 500;
     color: var(--gray-6);
     line-height: 1.5;
-    margin-bottom: 14px;
-    padding-left: 10px;
-    border-left: 2px solid var(--gray-6);
+    margin-bottom: 20px;
+    padding-left: 14px;
+    border-left: 3px solid var(--gray-6);
+    max-width: 820px;
   }
 
   .analysis-sections {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    gap: 16px;
+    gap: 24px;
   }
 
   .analysis-col-label {
-    font-size: 9px;
+    font-size: 10px;
     font-weight: 600;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--gray-4);
-    margin-bottom: 7px;
+    margin-bottom: 10px;
   }
 
   .analysis-col ul {
@@ -345,12 +368,12 @@
   }
 
   .analysis-col ul li {
-    font-size: 12px;
+    font-size: 16px;
     color: var(--gray-5);
-    line-height: 1.55;
-    padding-left: 10px;
+    line-height: 1.6;
+    padding-left: 14px;
     position: relative;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
   }
 
   .analysis-col ul li::before {
@@ -369,36 +392,81 @@
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.85);
+    background: rgba(0,0,0,0.92);
     z-index: 1000;
-    align-items: center;
-    justify-content: center;
-    padding: 40px;
+    overflow-y: auto;
+    padding: 60px 40px 40px;
   }
 
-  #lightbox.open { display: flex; }
+  #lightbox.open { display: block; }
 
-  #lightbox img {
-    max-width: 90vw;
-    max-height: 90vh;
-    object-fit: contain;
+  #lightbox-img {
+    display: block;
+    width: 100%;
+    max-width: 1400px;
+    height: auto;
+    margin: 0 auto;
     border-radius: 4px;
   }
 
   #lightbox-close {
     position: fixed;
-    top: 20px;
+    top: 16px;
     right: 24px;
     color: white;
-    font-size: 24px;
+    font-size: 28px;
     cursor: pointer;
     opacity: 0.7;
     background: none;
     border: none;
     line-height: 1;
+    z-index: 1001;
   }
 
   #lightbox-close:hover { opacity: 1; }
+
+  #lightbox-nav {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 16px;
+    pointer-events: none;
+    z-index: 1001;
+  }
+
+  .lightbox-nav-btn {
+    pointer-events: all;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: white;
+    font-size: 20px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+    transition: background 0.15s;
+  }
+
+  .lightbox-nav-btn:hover { background: rgba(255,255,255,0.25); }
+
+  #lightbox-counter {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(255,255,255,0.5);
+    font-size: 12px;
+    font-family: var(--font);
+    letter-spacing: 0.05em;
+    z-index: 1001;
+  }
 
   /* ── MOBILE HIDDEN ── */
   .mobile-only { display: none; }
@@ -413,6 +481,7 @@
     <div class="project-label">Huge Inc.</div>
     <div class="project-name">Gold Strike Casinos</div>
     <div class="project-sub">Beacon Research — May 2026</div>
+    <a class="download-link" href="https://github.com/jrauch-hugeinc/goldstrike-beacons/archive/refs/heads/main.zip" download>↓ Download images</a>
   </div>
 
   <!-- Casino Resort -->
@@ -422,11 +491,11 @@
       <span class="chevron">▶</span>
     </button>
     <div class="site-list">
-      <button class="site-link active" onclick="scrollTo('gold-strike')">Gold Strike <span class="site-link-sub">Client</span></button>
-      <button class="site-link" onclick="scrollTo('wynn-las-vegas')">Wynn Las Vegas <span class="site-link-sub">wynnlasvegas.com</span></button>
-      <button class="site-link" onclick="scrollTo('resorts-world-las-vegas')">Resorts World LV <span class="site-link-sub">rwlasvegas.com</span></button>
-      <button class="site-link" onclick="scrollTo('marina-bay-sands')">Marina Bay Sands <span class="site-link-sub">marinabaysands.com</span></button>
-      <button class="site-link" onclick="scrollTo('mohegan-sun')">Mohegan Sun <span class="site-link-sub">mohegansun.com</span></button>
+      <button class="site-link active" onclick="jumpTo('gold-strike')">Gold Strike <span class="site-link-sub">Client</span></button>
+      <button class="site-link" onclick="jumpTo('wynn-las-vegas')">Wynn Las Vegas <span class="site-link-sub">wynnlasvegas.com</span></button>
+      <button class="site-link" onclick="jumpTo('resorts-world-las-vegas')">Resorts World LV <span class="site-link-sub">rwlasvegas.com</span></button>
+      <button class="site-link" onclick="jumpTo('marina-bay-sands')">Marina Bay Sands <span class="site-link-sub">marinabaysands.com</span></button>
+      <button class="site-link" onclick="jumpTo('mohegan-sun')">Mohegan Sun <span class="site-link-sub">mohegansun.com</span></button>
     </div>
   </div>
 
@@ -437,11 +506,10 @@
       <span class="chevron">▶</span>
     </button>
     <div class="site-list">
-      <button class="site-link" onclick="scrollTo('aman')">Aman <span class="site-link-sub">aman.com</span></button>
-      <button class="site-link" onclick="scrollTo('auberge')">Auberge Resorts <span class="site-link-sub">aubergeresorts.com</span></button>
-      <button class="site-link" onclick="scrollTo('rosewood')">Rosewood Hotels <span class="site-link-sub">rosewoodhotels.com</span></button>
-      <button class="site-link" onclick="scrollTo('the-brando')">The Brando <span class="site-link-sub">thebrando.com</span></button>
-      <button class="site-link" onclick="scrollTo('belmond')">Belmond <span class="site-link-sub">belmond.com</span></button>
+      <button class="site-link" onclick="jumpTo('aman')">Aman <span class="site-link-sub">aman.com</span></button>
+      <button class="site-link" onclick="jumpTo('auberge')">Auberge Resorts <span class="site-link-sub">aubergeresorts.com</span></button>
+      <button class="site-link" onclick="jumpTo('rosewood')">Rosewood Hotels <span class="site-link-sub">rosewoodhotels.com</span></button>
+      <button class="site-link" onclick="jumpTo('the-brando')">The Brando <span class="site-link-sub">thebrando.com</span></button>
     </div>
   </div>
 
@@ -452,9 +520,9 @@
       <span class="chevron">▶</span>
     </button>
     <div class="site-list">
-      <button class="site-link" onclick="scrollTo('airbnb')">Airbnb <span class="site-link-sub">airbnb.com</span></button>
-      <button class="site-link" onclick="scrollTo('vrbo')">VRBO <span class="site-link-sub">vrbo.com</span></button>
-      <button class="site-link" onclick="scrollTo('opentable')">OpenTable <span class="site-link-sub">opentable.com</span></button>
+      <button class="site-link" onclick="jumpTo('airbnb')">Airbnb <span class="site-link-sub">airbnb.com</span></button>
+      <button class="site-link" onclick="jumpTo('vrbo')">VRBO <span class="site-link-sub">vrbo.com</span></button>
+      <button class="site-link" onclick="jumpTo('opentable')">OpenTable <span class="site-link-sub">opentable.com</span></button>
     </div>
   </div>
 </nav>
@@ -543,7 +611,7 @@
         </div>
       </div>
       <div class="analysis-block">
-        <div class="analysis-header-obs">A site that knows what it is but hasn't yet decided how to say it — functional, complete, and ready for a design language to match its ambitions.</div>
+        <div class="analysis-header-obs">Gold Strike: A site that knows what it is but hasn't yet decided how to say it — functional, complete, and ready for a design language to match its ambitions.</div>
         <div class="analysis-sections">
           <div class="analysis-col">
             <div class="analysis-col-label">Strengths</div>
@@ -599,7 +667,7 @@
         <div class="screenshot-card mobile-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/wynn-las-vegas/casino-resort__wynn-las-vegas__rewards__mobile.png" alt="Rewards" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Rewards</div></div>
       </div>
       <div class="analysis-block">
-        <div class="analysis-header-obs">The strongest design performer in the US casino category — Wynn uses restraint as a luxury signal in a space that almost never attempts it.</div>
+        <div class="analysis-header-obs">Wynn Las Vegas: The strongest design performer in the US casino category — Wynn uses restraint as a luxury signal in a space that almost never attempts it.</div>
         <div class="analysis-sections">
           <div class="analysis-col"><div class="analysis-col-label">Strengths</div><ul><li>Typography-led visual language — the brand earns its premium positioning through type decisions, not just photography</li><li>White space used assertively — pages breathe in a way that signals confidence rather than emptiness</li><li>Consistent design system across all page types, including rewards</li></ul></div>
           <div class="analysis-col"><div class="analysis-col-label">Watch out for</div><ul><li>The restraint can tip toward coldness — very little warmth or human presence in the photography</li><li>Mobile navigation is elegant but slightly opaque for a first-time visitor</li></ul></div>
@@ -632,7 +700,7 @@
         <div class="screenshot-card mobile-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/resorts-world-las-vegas/casino-resort__resorts-world-las-vegas__entertainment__mobile.png" alt="Entertain." onclick="openLightbox(this.src)"></div><div class="screenshot-label">Entertain.</div></div>
       </div>
       <div class="analysis-block">
-        <div class="analysis-header-obs">A new-build with ambition and budget that hasn't yet translated either into a coherent digital design system — visually busy in a way that undersells the property.</div>
+        <div class="analysis-header-obs">Resorts World Las Vegas: A new-build with ambition and budget that hasn't yet translated either into a coherent digital design system — visually busy in a way that undersells the property.</div>
         <div class="analysis-sections">
           <div class="analysis-col"><div class="analysis-col-label">Strengths</div><ul><li>Multi-brand hotel structure is clearly communicated — Hilton, Conrad, Crockfords differentiated within a parent IA</li><li>Entertainment programming given prominent placement — the concerts and nightlife offer are front-of-mind</li></ul></div>
           <div class="analysis-col"><div class="analysis-col-label">Watch out for</div><ul><li>Visual language feels inconsistent across sections — like multiple design teams worked in isolation</li><li>Homepage is trying to do too much simultaneously — no clear conversion priority</li><li>Photography quality varies significantly across page types</li></ul></div>
@@ -667,7 +735,7 @@
         <div class="screenshot-card mobile-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/marina-bay-sands/casino-resort__marina-bay-sands__rewards__mobile.png" alt="Rewards" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Rewards</div></div>
       </div>
       <div class="analysis-block">
-        <div class="analysis-header-obs">The global benchmark — MBS operates at a brand register no US casino resort has attempted, and the digital experience matches the physical ambition.</div>
+        <div class="analysis-header-obs">Marina Bay Sands: The global benchmark — MBS operates at a brand register no US casino resort has attempted, and the digital experience matches the physical ambition.</div>
         <div class="analysis-sections">
           <div class="analysis-col"><div class="analysis-col-label">Strengths</div><ul><li>Photography is cinematic and consistent — every page feels like it belongs to the same world</li><li>Design system maturity is evident across all page types — clearly a single coherent product</li><li>The scale of the offer (hotel, casino, dining, shopping, entertainment, MICE) is communicated without overwhelming the page</li></ul></div>
           <div class="analysis-col"><div class="analysis-col-label">Watch out for</div><ul><li>Information density on some interior pages tips into complexity — too many options presented simultaneously</li><li>The global scale can feel impersonal — the warmth of a specific place gets lost</li></ul></div>
@@ -703,7 +771,7 @@
         <div class="screenshot-card mobile-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/casino-resort/mohegan-sun/casino-resort__mohegan-sun__rewards__mobile.png" alt="Rewards" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Rewards</div></div>
       </div>
       <div class="analysis-block">
-        <div class="analysis-header-obs">The closest regional analog to Gold Strike — a large, full-service tribal casino resort with a loyal local base and an earnest but uneven digital presence.</div>
+        <div class="analysis-header-obs">Mohegan Sun: The closest regional analog to Gold Strike — a large, full-service tribal casino resort with a loyal local base and an earnest but uneven digital presence.</div>
         <div class="analysis-sections">
           <div class="analysis-col"><div class="analysis-col-label">Strengths</div><ul><li>Rewards program (Momentum) is well-integrated and clearly communicated across the site</li><li>The breadth of the entertainment offer comes through — arena concerts, dining, spa, shopping all visible</li></ul></div>
           <div class="analysis-col"><div class="analysis-col-label">Watch out for</div><ul><li>Visual language is dated — the site looks like it was designed circa 2018 and hasn't been significantly updated</li><li>Mobile experience feels compressed rather than designed — the desktop layout adapted rather than rethought</li><li>Promotional content overwhelms editorial content — the site reads as a circulars page, not a destination</li></ul></div>
@@ -748,7 +816,7 @@
         <div class="screenshot-card mobile-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/quiet-luxury-hotels/aman/quiet-luxury-hotels__aman__offers__mobile.png" alt="Offers" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Offers</div></div>
       </div>
       <div class="analysis-block">
-        <div class="analysis-header-obs">The category standard-bearer — Aman has built a digital experience where navigating the site is itself a form of anticipation for staying there.</div>
+        <div class="analysis-header-obs">Aman: The category standard-bearer — Aman has built a digital experience where navigating the site is itself a form of anticipation for staying there.</div>
         <div class="analysis-sections">
           <div class="analysis-col"><div class="analysis-col-label">Strengths</div><ul><li>Photography functions as primary navigation — you understand what Aman is before you've read a word</li><li>The unhurried pace of the site is a deliberate brand decision — nothing is urgent, nothing is promoted</li><li>Offers page maintains the brand register even under promotional pressure — a difficult thing to pull off</li></ul></div>
           <div class="analysis-col"><div class="analysis-col-label">Watch out for</div><ul><li>Accessibility — the spare approach sometimes sacrifices legibility for aesthetics</li><li>The booking flow is deliberately distant — a casino resort can't afford that level of conversion friction</li></ul></div>
@@ -778,7 +846,7 @@
         <div class="screenshot-card mobile-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/quiet-luxury-hotels/auberge/quiet-luxury-hotels__auberge__itineraries__mobile.png" alt="Itineraries" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Itineraries</div></div>
       </div>
       <div class="analysis-block">
-        <div class="analysis-header-obs">A masterclass in collection-brand IA — Auberge makes each property feel individual while the parent brand provides coherent context and trust.</div>
+        <div class="analysis-header-obs">Auberge Resorts: A masterclass in collection-brand IA — Auberge makes each property feel individual while the parent brand provides coherent context and trust.</div>
         <div class="analysis-sections">
           <div class="analysis-col"><div class="analysis-col-label">Strengths</div><ul><li>The parent/property relationship is the clearest in its class — you understand the collection model immediately</li><li>Itineraries as a nav destination is smart — it reframes the browse experience around aspiration rather than inventory</li><li>Property cards give enough to intrigue without overwhelming</li></ul></div>
           <div class="analysis-col"><div class="analysis-col-label">Watch out for</div><ul><li>Mobile properties index is dense — the card grid needs more breathing room at small viewports</li></ul></div>
@@ -813,7 +881,7 @@
         <div class="screenshot-card mobile-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/quiet-luxury-hotels/rosewood/quiet-luxury-hotels__rosewood__reservations__mobile.png" alt="Reservations" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Reservations</div></div>
       </div>
       <div class="analysis-block">
-        <div class="analysis-header-obs">More accessible than Aman, more coherent than most — Rosewood's "A Sense of Place" editorial framing is one of the smarter content strategies in luxury hospitality.</div>
+        <div class="analysis-header-obs">Rosewood: More accessible than Aman, more coherent than most — Rosewood's "A Sense of Place" editorial framing is one of the smarter content strategies in luxury hospitality.</div>
         <div class="analysis-sections">
           <div class="analysis-col"><div class="analysis-col-label">Strengths</div><ul><li>The editorial framing gives the site a genuine point of view — not just a property catalogue</li><li>Booking flow integration is better than most luxury peers — the reservation entry point is present without being pushy</li><li>Wellness as a top-level destination signals where the market is moving</li></ul></div>
           <div class="analysis-col"><div class="analysis-col-label">Watch out for</div><ul><li>Mobile execution is slightly below the desktop experience — some layout decisions don't translate cleanly</li><li>The property detail page is content-rich but could be better organized for a guest making a booking decision</li></ul></div>
@@ -845,7 +913,7 @@
         <div class="screenshot-card mobile-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/quiet-luxury-hotels/the-brando/quiet-luxury-hotels__the-brando__experiences__mobile.png" alt="Experiences" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Experiences</div></div>
       </div>
       <div class="analysis-block">
-        <div class="analysis-header-obs">Small site, outsized confidence — The Brando is the rare case where the digital experience genuinely mirrors the experience of being there.</div>
+        <div class="analysis-header-obs">The Brando: Small site, outsized confidence — The Brando is the rare case where the digital experience genuinely mirrors the experience of being there.</div>
         <div class="analysis-sections">
           <div class="analysis-col"><div class="analysis-col-label">Strengths</div><ul><li>Every page feels considered — nothing is default, nothing is a template</li><li>The color palette and texture work together to evoke the physical place without describing it</li><li>Content is spare but specific — you know exactly what kind of place this is after 30 seconds</li></ul></div>
           <div class="analysis-col"><div class="analysis-col-label">Watch out for</div><ul><li>Scroll-triggered animations impacted capture quality on some pages — worth reviewing live for full effect</li><li>The small scale of the property means some patterns don't translate to a full-service resort</li></ul></div>
@@ -854,32 +922,6 @@
       </div>
     </div>
 
-    <!-- Belmond -->
-    <div class="site-section" id="belmond">
-      <div class="site-header">
-        <div class="site-name">Belmond</div>
-        <a href="https://belmond.com" class="site-domain" target="_blank">belmond.com</a>
-      </div>
-      <div class="viewport-toggle">
-        <button class="vt-btn active" onclick="setViewport(this, 'belmond', 'desktop')">Desktop</button>
-      </div>
-      <div class="screenshot-strip" id="strip-belmond-desktop">
-        <div class="placeholder-card screenshot-card" style="width:200px">
-          <div class="screenshot-img-wrap" style="height:120px;display:flex;align-items:center;justify-content:center;">
-            <div class="placeholder-text">Homepage only — interior pages blocked by LVMH bot protection. Recommend manual capture.</div>
-          </div>
-          <div class="screenshot-label">Homepage (not captured)</div>
-        </div>
-      </div>
-      <div class="analysis-block">
-        <div class="analysis-header-obs">Recently redesigned with genuine design system maturity — Belmond shows how a heritage brand modernizes without losing authority, even if we couldn't fully capture it.</div>
-        <div class="analysis-sections">
-          <div class="analysis-col"><div class="analysis-col-label">Strengths</div><ul><li>Post-redesign visual language is refined and confident — the LVMH ownership shows in the production quality</li><li>Strong model for how a legacy brand with iconic properties can feel contemporary without chasing trends</li></ul></div>
-          <div class="analysis-col"><div class="analysis-col-label">Watch out for</div><ul><li>Interior pages could not be captured — LVMH enterprise bot protection blocks automated screenshot tools</li><li>Worth visiting live to assess the full booking flow and property detail pages</li></ul></div>
-          <div class="analysis-col steal"><div class="analysis-col-label">Steal this</div><ul><li>The modernization approach — how to feel fresh without abandoning what made the brand valuable</li></ul></div>
-        </div>
-      </div>
-    </div>
   </div>
 
   <!-- ═══════════════════════════════════════
@@ -914,7 +956,7 @@
         <div class="screenshot-card mobile-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/booking-reservation-ux/airbnb/booking-reservation-ux__airbnb__experiences__mobile.png" alt="Experiences" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Experiences</div></div>
       </div>
       <div class="analysis-block">
-        <div class="analysis-header-obs">The benchmark everything else gets measured against — Airbnb has turned the search-to-book flow into a trust-building machine where every interaction is designed to reduce anxiety.</div>
+        <div class="analysis-header-obs">Airbnb: The benchmark everything else gets measured against — Airbnb has turned the search-to-book flow into a trust-building machine where every interaction is designed to reduce anxiety.</div>
         <div class="analysis-sections">
           <div class="analysis-col"><div class="analysis-col-label">Strengths</div><ul><li>Search results split-view (list + map) gives two mental models simultaneously — price-shopping and location-anchoring</li><li>Trust signals embedded in the flow — guest favorites, superhost badges, review counts — never feel bolted on</li><li>Experiences as a separate nav destination reframes the platform beyond accommodation</li><li>All-fees-included pricing transparency is now a conversion advantage, not just an ethical choice</li></ul></div>
           <div class="analysis-col"><div class="analysis-col-label">Watch out for</div><ul><li>Mobile search defaults to map view — shows pins without listings, which can be disorienting on first visit</li><li>The SPA architecture means automated screenshot capture is unreliable — the live experience is the reference</li></ul></div>
@@ -941,7 +983,7 @@
         <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/booking-reservation-ux/vrbo/screencapture-vrbo-trips-egti-VPM-EY1-78YT-2026-05-01-13_43_07.png" alt="Trip Itinerary" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Trip Itinerary</div></div>
       </div>
       <div class="analysis-block">
-        <div class="analysis-header-obs">The fullest funnel capture in this category — VRBO shows how a booking flow manages trust across every stage from search to post-confirmation.</div>
+        <div class="analysis-header-obs">VRBO: The fullest funnel capture in this category — VRBO shows how a booking flow manages trust across every stage from search to post-confirmation.</div>
         <div class="analysis-sections">
           <div class="analysis-col"><div class="analysis-col-label">Strengths</div><ul><li>Search results are clean and card-hierarchy is well-considered — price, location, and rating given appropriate visual weight</li><li>Checkout flow is comprehensive — damage protection, cancellation policy, house rules all surface before payment, not after</li><li>Trip itinerary view post-booking is a useful model for Gold Strike's reservation confirmation experience</li></ul></div>
           <div class="analysis-col"><div class="analysis-col-label">Watch out for</div><ul><li>Checkout is long — the density of required information creates friction even when the content is useful</li><li>The VrboCare and loyalty messaging in the checkout feels like an upsell layer rather than a benefit</li></ul></div>
@@ -967,7 +1009,7 @@
         <div class="screenshot-card"><div class="screenshot-img-wrap"><img src="https://raw.githubusercontent.com/jrauch-hugeinc/goldstrike-beacons/main/booking-reservation-ux/opentable/screencapture-opentable-booking-details-2026-05-01-12_56_33.png" alt="Booking Step" onclick="openLightbox(this.src)"></div><div class="screenshot-label">Booking Step</div></div>
       </div>
       <div class="analysis-block">
-        <div class="analysis-header-obs">Reservation as a solved product — OpenTable has reduced dining booking to its minimum viable friction, and the booking step itself is so stripped down it's almost invisible.</div>
+        <div class="analysis-header-obs">OpenTable: Reservation as a solved product — OpenTable has reduced dining booking to its minimum viable friction, and the booking step itself is so stripped down it's almost invisible.</div>
         <div class="analysis-sections">
           <div class="analysis-col"><div class="analysis-col-label">Strengths</div><ul><li>Restaurant listing pages surface everything a diner needs — reviews, photos, menu links, availability — in a coherent hierarchy</li><li>The booking confirmation step is remarkably lean — party size, time, and contact info, nothing more</li><li>Homepage search is instant and context-aware — Providence-specific results on load based on location</li></ul></div>
           <div class="analysis-col"><div class="analysis-col-label">Watch out for</div><ul><li>The brand voice essentially disappears in the booking step — purely functional, no warmth</li><li>Mobile experience is functionally fine but design-thin — the restaurant pages especially feel compressed</li></ul></div>
@@ -980,9 +1022,14 @@
 </main>
 
 <!-- LIGHTBOX -->
-<div id="lightbox" onclick="closeLightbox()">
+<div id="lightbox" onclick="handleLightboxClick(event)">
   <button id="lightbox-close" onclick="closeLightbox()">✕</button>
+  <div id="lightbox-nav">
+    <button class="lightbox-nav-btn" onclick="lightboxStep(-1)">‹</button>
+    <button class="lightbox-nav-btn" onclick="lightboxStep(1)">›</button>
+  </div>
   <img id="lightbox-img" src="" alt="Full size screenshot">
+  <div id="lightbox-counter"></div>
 </div>
 
 <script>
@@ -993,14 +1040,15 @@
   }
 
   // ── Scroll to site section ──
-  function scrollTo(id) {
+  function jumpTo(id) {
     const el = document.getElementById(id);
     if (!el) return;
-    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const main = document.getElementById('main');
+    const elRect = el.getBoundingClientRect();
+    const mainRect = main.getBoundingClientRect();
+    main.scrollTop += elRect.top - mainRect.top;
 
-    // Update active state in sidebar
     document.querySelectorAll('.site-link').forEach(l => l.classList.remove('active'));
-    // Find the button that targets this id
     document.querySelectorAll('.site-link').forEach(l => {
       if (l.getAttribute('onclick')?.includes(`'${id}'`)) {
         l.classList.add('active');
@@ -1010,11 +1058,8 @@
 
   // ── Viewport toggle ──
   function setViewport(btn, site, viewport) {
-    // Toggle button state
     btn.closest('.viewport-toggle').querySelectorAll('.vt-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-
-    // Show/hide strips
     const desktop = document.getElementById(`strip-${site}-desktop`);
     const mobile = document.getElementById(`strip-${site}-mobile`);
     if (desktop) desktop.style.display = viewport === 'desktop' ? 'flex' : 'none';
@@ -1022,9 +1067,45 @@
   }
 
   // ── Lightbox ──
+  let lightboxImages = [];
+  let lightboxIndex = 0;
+
+  function buildImageList(clickedSrc) {
+    // Collect all currently visible images in the entire document
+    const imgs = [];
+    document.querySelectorAll('.screenshot-strip').forEach(strip => {
+      if (strip.style.display === 'none') return;
+      strip.querySelectorAll('.screenshot-img-wrap img').forEach(img => {
+        imgs.push(img.src);
+      });
+    });
+    return imgs;
+  }
+
   function openLightbox(src) {
-    document.getElementById('lightbox-img').src = src;
+    lightboxImages = buildImageList(src);
+    lightboxIndex = lightboxImages.indexOf(src);
+    if (lightboxIndex === -1) { lightboxImages = [src]; lightboxIndex = 0; }
+    renderLightbox();
     document.getElementById('lightbox').classList.add('open');
+    document.getElementById('lightbox').scrollTop = 0;
+  }
+
+  function renderLightbox() {
+    document.getElementById('lightbox-img').src = lightboxImages[lightboxIndex];
+    document.getElementById('lightbox-counter').textContent =
+      `${lightboxIndex + 1} / ${lightboxImages.length}`;
+    document.getElementById('lightbox').scrollTop = 0;
+  }
+
+  function lightboxStep(dir) {
+    lightboxIndex = (lightboxIndex + dir + lightboxImages.length) % lightboxImages.length;
+    renderLightbox();
+  }
+
+  function handleLightboxClick(e) {
+    // Only close if clicking the backdrop directly (not the image or nav)
+    if (e.target === document.getElementById('lightbox')) closeLightbox();
   }
 
   function closeLightbox() {
@@ -1033,7 +1114,10 @@
   }
 
   document.addEventListener('keydown', e => {
+    if (!document.getElementById('lightbox').classList.contains('open')) return;
     if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowRight') lightboxStep(1);
+    if (e.key === 'ArrowLeft') lightboxStep(-1);
   });
 
   // ── Active sidebar tracking on scroll ──
@@ -1043,10 +1127,8 @@
   main.addEventListener('scroll', () => {
     let current = '';
     sections.forEach(section => {
-      const top = section.offsetTop - 60;
-      if (main.scrollTop >= top) current = section.id;
+      if (main.scrollTop >= section.offsetTop - 80) current = section.id;
     });
-
     if (current) {
       document.querySelectorAll('.site-link').forEach(l => {
         l.classList.remove('active');
