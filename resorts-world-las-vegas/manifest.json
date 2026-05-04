@@ -1,0 +1,122 @@
+[
+  {
+    "filename": "casino-resort__resorts-world-las-vegas__home__desktop.png",
+    "url": "https://www.rwlasvegas.com",
+    "viewport": "desktop",
+    "category": "casino-resort",
+    "site": "resorts-world-las-vegas",
+    "page_type": "home",
+    "status": "captured",
+    "error": null
+  },
+  {
+    "filename": "casino-resort__resorts-world-las-vegas__home__mobile.png",
+    "url": "https://www.rwlasvegas.com",
+    "viewport": "mobile",
+    "category": "casino-resort",
+    "site": "resorts-world-las-vegas",
+    "page_type": "home",
+    "status": "captured",
+    "error": null
+  },
+  {
+    "filename": "casino-resort__resorts-world-las-vegas__casino__desktop.png",
+    "url": "https://www.rwlasvegas.com/gaming/",
+    "viewport": "desktop",
+    "category": "casino-resort",
+    "site": "resorts-world-las-vegas",
+    "page_type": "casino",
+    "status": "captured",
+    "error": null
+  },
+  {
+    "filename": "casino-resort__resorts-world-las-vegas__casino__mobile.png",
+    "url": "https://www.rwlasvegas.com/gaming/",
+    "viewport": "mobile",
+    "category": "casino-resort",
+    "site": "resorts-world-las-vegas",
+    "page_type": "casino",
+    "status": "captured",
+    "error": null
+  },
+  {
+    "filename": "casino-resort__resorts-world-las-vegas__hotel-rooms__desktop.png",
+    "url": "https://www.rwlasvegas.com/hotel/",
+    "viewport": "desktop",
+    "category": "casino-resort",
+    "site": "resorts-world-las-vegas",
+    "page_type": "hotel-rooms",
+    "status": "captured",
+    "error": null
+  },
+  {
+    "filename": "casino-resort__resorts-world-las-vegas__hotel-rooms__mobile.png",
+    "url": "https://www.rwlasvegas.com/hotel/",
+    "viewport": "mobile",
+    "category": "casino-resort",
+    "site": "resorts-world-las-vegas",
+    "page_type": "hotel-rooms",
+    "status": "captured",
+    "error": null
+  },
+  {
+    "filename": "casino-resort__resorts-world-las-vegas__dining__desktop.png",
+    "url": "https://www.rwlasvegas.com/dining/",
+    "viewport": "desktop",
+    "category": "casino-resort",
+    "site": "resorts-world-las-vegas",
+    "page_type": "dining",
+    "status": "captured",
+    "error": null
+  },
+  {
+    "filename": "casino-resort__resorts-world-las-vegas__dining__mobile.png",
+    "url": "https://www.rwlasvegas.com/dining/",
+    "viewport": "mobile",
+    "category": "casino-resort",
+    "site": "resorts-world-las-vegas",
+    "page_type": "dining",
+    "status": "captured",
+    "error": null
+  },
+  {
+    "filename": "casino-resort__resorts-world-las-vegas__entertainment__desktop.png",
+    "url": "https://www.rwlasvegas.com/entertainment/",
+    "viewport": "desktop",
+    "category": "casino-resort",
+    "site": "resorts-world-las-vegas",
+    "page_type": "entertainment",
+    "status": "captured",
+    "error": null
+  },
+  {
+    "filename": "casino-resort__resorts-world-las-vegas__entertainment__mobile.png",
+    "url": "https://www.rwlasvegas.com/entertainment/",
+    "viewport": "mobile",
+    "category": "casino-resort",
+    "site": "resorts-world-las-vegas",
+    "page_type": "entertainment",
+    "status": "captured",
+    "error": null
+  },
+  {
+    "filename": "casino-resort__resorts-world-las-vegas__rewards__desktop.png",
+    "url": "https://www.rwlasvegas.com/rwrewards/",
+    "viewport": "desktop",
+    "category": "casino-resort",
+    "site": "resorts-world-las-vegas",
+    "page_type": "rewards",
+    "status": "error",
+    "error": "HTTP 500"
+  },
+  {
+    "filename": "casino-resort__resorts-world-las-vegas__rewards__mobile.png",
+    "url": "https://www.rwlasvegas.com/rwrewards/",
+    "viewport": "mobile",
+    "category": "casino-resort",
+    "site": "resorts-world-las-vegas",
+    "page_type": "rewards",
+    "status": "error",
+    "error": "HTTP 500"
+  }
+]
